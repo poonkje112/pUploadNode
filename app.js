@@ -7,6 +7,9 @@ const dbInfo = require('./dbInfo.json')
 const uid = require('uniqid');
 const fs = require('fs');
 
+const time = [];
+const ids = [];
+
 const con = sql.createConnection({
     host: dbInfo['host'],
     user: dbInfo['username'],
@@ -24,7 +27,7 @@ const storage = multer.diskStorage({
     destination: './public/uploads/',
     filename: function (req, file, cb) {
         const curDate = Date.now();
-        const eDate = (curDate + (3 * 86400000));
+        const eDate = (curDate + 86400000);
         const fileID = uid();
         cb(null, fileID + path.extname(file.originalname));
         con.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + fileID + "', '" + curDate + "', '" + eDate + "', '" + file.originalname + "')")
@@ -48,6 +51,22 @@ app.get('/:id', function (req, res) {
         if (err) {
             res.send("id: " + req.params.id)
         } else if (result[0] !== undefined) {
+            res.render('file', {
+                filename: result[0]['fileName'],
+                date: new Date(parseInt(result[0]['sDate'])),
+                fid: req.params.id
+            });
+        } else {
+            res.send('Error 404')
+        }
+    })
+});
+
+app.post('/:id', function (req, res) {
+    con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
+        if (err) {
+            res.send("id: " + req.params.id)
+        } else if (result[0] !== undefined) {
             res.download("./public/uploads/" + result[0]['fileID'] + path.extname(result[0]['fileName']), result[0]['fileName'], function (err) {
                 if (err) {
                     throw (err);
@@ -55,7 +74,6 @@ app.get('/:id', function (req, res) {
                 }
             });
         } else {
-            res.send('Error 404')
         }
     })
 });
@@ -64,7 +82,7 @@ app.get('/:id', function (req, res) {
 app.get('/', (req, res) => res.render('index'));
 
 // What to do when there is a post for /upload
-app.post('/upload', (req, res) => {
+app.post('/', (req, res) => {
     upload(req, res, (err) => {
         if (err) {
             res.render('index', {
@@ -77,6 +95,12 @@ app.post('/upload', (req, res) => {
         } else {
             var name = req.file.filename;
             name = name.replace(path.extname(name), "");
+
+            if (parseInt(req.body.lifeTime) > 1) {
+                ids.push(name);
+                time.push(parseInt(req.body.lifeTime, 10));
+            }
+
             res.render('index', {
                 dl: "http://www.uploads.poonkje.com/" + name
             });
@@ -108,4 +132,13 @@ setInterval(function () {
             }
         }
     });
+
+    for (i = 0; i < ids.length; i++) {
+        const id = ids.pop();
+        const t = time.pop();
+        con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + id + "'", function (err, results, fields) {
+            con.query("UPDATE `upload_DB` SET `eDate` = '" + (parseInt(results[0]["sDate"], 10) + (86400000 * t)) + "' WHERE `upload_DB`.`fileID` = '" + id + "'");
+        });
+    }
+
 }, interval);
