@@ -7,10 +7,17 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
 </head>
 
 <body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#dlForm").submit();
+        });
+    </script>
+
     <p><b>File Name</b></p><br>
     <p>
         <%= typeof filename != 'undefined' ? filename : 'ERROR' %>
@@ -20,7 +27,7 @@
     <p>
         <%= typeof date != 'undefined' ? date : 'ERROR' %>
     </p>
-    <form method="POST" action=<%=typeof fid !='undefined' ? '/' + fid : '' %>>
+    <form id="dlForm" method="POST" action=<%=typeof fid !='undefined' ? '/' + fid : '' %>>
         <input type="submit" value="Download">
     </form>
 </body>

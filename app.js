@@ -6,6 +6,7 @@ const sql = require('mysql');
 const dbInfo = require('./dbInfo.json')
 const uid = require('uniqid');
 const fs = require('fs');
+const $ = require('jquery')
 
 const time = [];
 const ids = [];
