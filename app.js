@@ -130,7 +130,7 @@ app.post('/', (req, res) => {
 });
 
 //Setting our static folder
-app.use(express.static('./public'));
+app.use(express.static(__dirname + '/public'));
 
 //Setting our webserver port
 const port = 80;
