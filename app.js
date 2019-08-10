@@ -57,7 +57,8 @@ app.get('/:id', function (req, res) {
                 filename: result[0]['fileName'],
                 date: new Date(parseInt(result[0]['sDate'])),
                 fid: req.params.id,
-                embedLink: "http://www.poonkje.com/e/" + req.params.id
+                embedLink: "http://www.poonkje.com/e/" + req.params.id,
+                filenamedir: "/public/uploads/" + result[0]['fileName']
             });
         } else {
             res.send('Error 404')

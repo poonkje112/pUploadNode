@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <meta property="og:site_name" content="pUploads" />
     <meta property="og:title" content=<%=typeof filename !='undefined' ? filename : '' %> />
-    <meta property="og:image" content="/public/uploads/" + <%= typeof filename !='undefined' ? filename : '' %>
+    <meta property="og:image" content=<%=typeof filenamedir !='undefined' ? filenamedir : '' %>
     />
 
 </head>
