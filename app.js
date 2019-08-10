@@ -55,10 +55,28 @@ app.get('/:id', function (req, res) {
             res.render('file', {
                 filename: result[0]['fileName'],
                 date: new Date(parseInt(result[0]['sDate'])),
-                fid: req.params.id
+                fid: req.params.id,
+                embedLink: "http://www.poonkje.com/e/" + req.params.id
             });
         } else {
             res.send('Error 404')
+        }
+    })
+});
+
+// If there is an id we open the file download page
+app.get('/e/:id', function (req, res) {
+    con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
+        if (err) {
+            res.send("id: " + req.params.id)
+        } else if (result[0] !== undefined) {
+            res.download("./public/uploads/" + result[0]['fileID'] + path.extname(result[0]['fileName']), result[0]['fileName'], function (err) {
+                if (err) {
+                    throw (err);
+                } else {
+                }
+            });
+        } else {
         }
     })
 });
