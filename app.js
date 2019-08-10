@@ -58,7 +58,7 @@ app.get('/:id', function (req, res) {
                 date: new Date(parseInt(result[0]['sDate'])),
                 fid: req.params.id,
                 embedLink: "http://www.poonkje.com/e/" + req.params.id,
-                filenamedir: "/public/uploads/" + result[0]['fileName']
+                filenamedir: "/static/uploads/" + req.params.id + path.extname(result[0]['fileName'])
             });
         } else {
             res.send('Error 404')
@@ -130,7 +130,7 @@ app.post('/', (req, res) => {
 });
 
 //Setting our static folder
-app.use(express.static(__dirname + '/public'));
+app.use('/static', express.static(__dirname + '/public'));
 
 //Setting our webserver port
 const port = 80;
