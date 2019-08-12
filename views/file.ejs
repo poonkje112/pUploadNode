@@ -10,20 +10,13 @@
     <meta property="og:site_name" content="pUploads" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content=<%=typeof filename !='undefined' ? filename : '' %> />
-    <meta property="og:image" content=<%=typeof filenamedir !='undefined' ? filenamedir : '' %>
-    />
+    <meta property="og:image" content=<%=typeof filenamedir !='undefined' ? filenamedir : '' %> />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
 </head>
 
 <body>
-
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#dlForm").submit();
-        });
-    </script> -->
-
     <iframe style="display:none;" src=<%=typeof embedLink !='undefined' ? embedLink : '' %>></iframe>
 
     <p><b>File Name</b></p><br>
@@ -38,6 +31,10 @@
     <form id="dlForm" method="POST" action=<%=typeof fid !='undefined' ? '/' + fid : '' %>>
         <input type="submit" value="Download">
     </form>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 
 </html>
