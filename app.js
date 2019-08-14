@@ -47,6 +47,18 @@ const app = express();
 app.set('view engine', 'ejs');
 
 // If there is an id we open the file download page
+app.get('/samplefile', function (req, res) {
+    res.render('file', {
+        filename: "Sample File",
+        date: new Date(),
+        fid: req.params.id,
+        embedLink: "http://www.poonkje.com/samplefile",
+        filenamedir: "/static/uploads/"
+    });
+});
+
+
+// If there is an id we open the file download page
 app.get('/:id', function (req, res) {
     con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
         if (err) {
@@ -65,6 +77,7 @@ app.get('/:id', function (req, res) {
         }
     })
 });
+
 
 // If there is an id we open the file download page
 app.get('/e/:id', function (req, res) {
