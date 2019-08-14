@@ -1,3 +1,4 @@
+/* Desktop */
 body, html {
     height: 100%;
 }
@@ -30,7 +31,7 @@ body, html {
 }
 
 .footer {
-    border-top: px solid #9e9e9e;
+    border-top: 1px solid #9e9e9e;
     position: fixed;
     left: 0;
     bottom: 0;
@@ -46,4 +47,39 @@ body, html {
 
 .footer .footer_info {
     display: inline;
+}
+
+/* Mobile */
+@media only screen and (max-width: 1023px) {
+    body {
+        background-image:url("");
+        background-color: whitesmoke;
+        height: 100%;
+    }
+    
+    .mContainer {
+        width: 100%;
+        height: 100%;
+        border-radius: 0px;
+    }
+
+    .mContainer h1 {
+        font-size: 36px;
+    }
+
+    .footer {
+        border-top: 1px solid #9e9e9e;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: whitesmoke;
+        color: black;
+        text-align: center;
+        z-index: 1000;
+    }
+
+    .footer_info {
+        visibility: hidden;
+    }
 }
