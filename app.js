@@ -25,7 +25,7 @@ con.connect(function (err) {
 
 // Creating our storage engine
 const storage = multer.diskStorage({
-    destination: './public/uploads/',
+    destination: dbInfo['fileStorage'],
     filename: function (req, file, cb) {
         const curDate = Date.now();
         const eDate = (curDate + 86400000);
@@ -85,7 +85,7 @@ app.get('/e/:id', function (req, res) {
         if (err) {
             res.send("id: " + req.params.id)
         } else if (result[0] !== undefined) {
-            res.download("./public/uploads/" + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
+            res.download(dbInfo['fileStorage'] + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
                 if (err) {
                     throw (err);
                 } else {
@@ -101,7 +101,7 @@ app.post('/:id', function (req, res) {
         if (err) {
             res.send("id: " + req.params.id)
         } else if (result[0] !== undefined) {
-            res.download("./public/uploads/" + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
+            res.download(dbInfo['fileStorage'] + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
                 if (err) {
                     throw (err);
                 } else {
@@ -145,7 +145,7 @@ app.post('/', (req, res) => {
 
 //Setting our static folders
 app.use('/css', express.static(__dirname + '/public/css'));
-app.use(express.static('./public/uploads'));
+app.use(express.static(dbInfo['fileStorage']));
 
 //Setting our webserver port
 const port = 80;
@@ -160,7 +160,7 @@ setInterval(function () {
         if (results[0] !== undefined) {
             for (i = 0; i < results.length; i++) {
                 const fileName = results[i]['fileID'] + path.extname(results[i]['fileName']);
-                fs.unlink('./public/uploads/' + fileName, function (err) {
+                fs.unlink(dbInfo['fileStorage'] + fileName, function (err) {
                     if (err) { }
                 });
                 con.query("DELETE FROM `upload_DB` WHERE `upload_DB`.`fileID` = '" + results[i]['fileID'] + "'");
