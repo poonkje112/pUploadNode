@@ -6,6 +6,7 @@ const sql = require('mysql');
 const dbInfo = require('./dbInfo.json')
 const uid = require('uniqid');
 const fs = require('fs');
+const request = require('request')
 const $ = require('jquery');
 
 const time = [];
@@ -60,40 +61,58 @@ app.get('/samplefile', function (req, res) {
 
 // If there is an id we open the file download page
 app.get('/:id', function (req, res) {
-    con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
-        if (err) {
-            res.send("id: " + req.params.id)
-        } else if (result[0] !== undefined) {
+    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}`,
+        function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                if (parseFloat(body) > 0.99) {
+                    res.send("ERROR: VPN's and Proxy's are not allowed!");
+                } else {
+                    con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
+                        if (err) {
+                            res.send("id: " + req.params.id)
+                        } else if (result[0] !== undefined) {
 
-            res.render('file', {
-                filename: unescape(result[0]['fileName']),
-                date: new Date(parseInt(result[0]['sDate'])),
-                fid: req.params.id,
-                embedLink: "http://www.poonkje.com/e/" + req.params.id,
-                filenamedir: "/public/uploads/" + req.params.id + path.extname(result[0]['fileName'])
-            });
-        } else {
-            res.send('Error 404')
-        }
-    })
+                            res.render('file', {
+                                filename: unescape(result[0]['fileName']),
+                                date: new Date(parseInt(result[0]['sDate'])),
+                                fid: req.params.id,
+                                embedLink: "http://www.poonkje.com/e/" + req.params.id,
+                                filenamedir: dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName'])
+                            });
+                        } else {
+                            res.send('Error 404')
+                        }
+                    })
+                }
+            }
+        });
 });
 
 
 // If there is an id we open the file download page
 app.get('/e/:id', function (req, res) {
-    con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
-        if (err) {
-            res.send("id: " + req.params.id)
-        } else if (result[0] !== undefined) {
-            res.download(dbInfo['fileStorage'] + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
-                if (err) {
-                    throw (err);
+    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}`,
+        function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                if (parseFloat(body) > 0.99) {
+                    res.send("ERROR: VPN's and Proxy's are not allowed!");
                 } else {
+                    con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
+                        if (err) {
+                            res.send("id: " + req.params.id)
+                        } else if (result[0] !== undefined) {
+                            res.download(dbInfo['fileStorage'] + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
+                                if (err) {
+                                    throw (err);
+                                } else {
+                                }
+                            });
+                        } else {
+                        }
+                    })
                 }
-            });
-        } else {
-        }
-    })
+            }
+        });
 });
 
 app.post('/:id', function (req, res) {
@@ -113,7 +132,18 @@ app.post('/:id', function (req, res) {
 });
 
 //If there is no ID then we go to load our upload form
-app.get('/', (req, res) => res.render('index'));
+app.get('/', function (req, res) {
+    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}`,
+        function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                if (parseFloat(body) > 0.99) {
+                    res.send("ERROR: VPN's and Proxy's are not allowed!");
+                } else {
+                    res.render('index');
+                }
+            }
+        });
+});
 
 // What to do when there is a post for /upload
 app.post('/', (req, res) => {
