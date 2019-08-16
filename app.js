@@ -62,7 +62,7 @@ app.get('/samplefile', function (req, res) {
 
 // If there is an id we open the file download page
 app.get('/:id', function (req, res) {
-    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}&flags=m`,
+    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}&flags=b`,
         function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 if (parseFloat(body) > 0.99) {
@@ -92,7 +92,7 @@ app.get('/:id', function (req, res) {
 
 // If there is an id we open the file download page
 app.get('/e/:id', function (req, res) {
-    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}&flags=m`,
+    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}&flags=b`,
         function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 if (parseFloat(body) > 0.99) {
@@ -134,7 +134,7 @@ app.post('/:id', function (req, res) {
 
 //If there is no ID then we go to load our upload form
 app.get('/', function (req, res) {
-    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}&flags=m`,
+    request(`http://check.getipintel.net/check.php?ip=${req.connection.remoteAddress}&contact=${dbInfo["contactEmail"]}&flags=b`,
         function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 if (parseFloat(body) > 0.99) {
