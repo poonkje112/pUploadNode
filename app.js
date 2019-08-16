@@ -6,7 +6,7 @@ const sql = require('mysql');
 const dbInfo = require('./dbInfo.json')
 const uid = require('uniqid');
 const fs = require('fs');
-const $ = require('jquery')
+const $ = require('jquery');
 
 const time = [];
 const ids = [];
@@ -70,7 +70,7 @@ app.get('/:id', function (req, res) {
                 date: new Date(parseInt(result[0]['sDate'])),
                 fid: req.params.id,
                 embedLink: "http://www.poonkje.com/e/" + req.params.id,
-                filenamedir: "/static/uploads/" + req.params.id + path.extname(result[0]['fileName'])
+                filenamedir: "/public/uploads/" + req.params.id + path.extname(result[0]['fileName'])
             });
         } else {
             res.send('Error 404')
@@ -136,19 +136,20 @@ app.post('/', (req, res) => {
             }
 
             res.render('index', {
-                dl: "http://www.uploads.poonkje.com/" + name
+                dl: "http://www.uploads.poonkje.com/" + name,
+                msg: req.connection.remoteAddress
             });
         }
     });
 });
 
-//Setting our static folder
-app.use('/static', express.static(__dirname + '/public'));
+//Setting our static folders
+app.use('/css', express.static(__dirname + '/public/css'));
+app.use(express.static('./public/uploads'));
 
 //Setting our webserver port
 const port = 80;
 
-//Starting our server!
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
 const minutes = 0.3;
