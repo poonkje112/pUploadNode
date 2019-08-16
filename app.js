@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
         const eDate = (curDate + 86400000);
         const fileID = uid();
         cb(null, fileID + path.extname(file.originalname));
-        con.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + fileID + "', '" + curDate + "', '" + eDate + "', '" + file.originalname + "')")
+        con.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + fileID + "', '" + curDate + "', '" + eDate + "', '" + escape(file.originalname) + "')")
     }
 });
 
@@ -66,7 +66,7 @@ app.get('/:id', function (req, res) {
         } else if (result[0] !== undefined) {
 
             res.render('file', {
-                filename: result[0]['fileName'],
+                filename: unescape(result[0]['fileName']),
                 date: new Date(parseInt(result[0]['sDate'])),
                 fid: req.params.id,
                 embedLink: "http://www.poonkje.com/e/" + req.params.id,
@@ -85,7 +85,7 @@ app.get('/e/:id', function (req, res) {
         if (err) {
             res.send("id: " + req.params.id)
         } else if (result[0] !== undefined) {
-            res.download("./public/uploads/" + result[0]['fileID'] + path.extname(result[0]['fileName']), result[0]['fileName'], function (err) {
+            res.download("./public/uploads/" + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
                 if (err) {
                     throw (err);
                 } else {
@@ -101,7 +101,7 @@ app.post('/:id', function (req, res) {
         if (err) {
             res.send("id: " + req.params.id)
         } else if (result[0] !== undefined) {
-            res.download("./public/uploads/" + result[0]['fileID'] + path.extname(result[0]['fileName']), result[0]['fileName'], function (err) {
+            res.download("./public/uploads/" + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
                 if (err) {
                     throw (err);
                 } else {
