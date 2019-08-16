@@ -3,10 +3,11 @@ const multer = require('multer');
 const ejs = require('ejs');
 const path = require('path');
 const sql = require('mysql');
-const dbInfo = require('./dbInfo.json')
+const dbInfo = require('./dbInfo.json');
 const uid = require('uniqid');
 const fs = require('fs');
-const request = require('request')
+const request = require('request');
+const Unsplash = require('unsplash-js').default;
 const $ = require('jquery');
 
 const time = [];
@@ -141,6 +142,7 @@ app.get('/', function (req, res) {
                 } else {
                     res.render('index');
                 }
+                console.log(body);
             }
         });
 });
