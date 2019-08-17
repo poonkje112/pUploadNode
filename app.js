@@ -105,8 +105,8 @@ app.get('/:id', function (req, res) {
                                 filename: unescape(result[0]['fileName']),
                                 date: new Date(parseInt(result[0]['sDate'])),
                                 fid: req.params.id,
-                                embedLink: "http://www.poonkje.com/e/" + req.params.id,
-                                filenamedir: "http://www.poonkje.com/embedImage/" + req.params.id + path.extname(result[0]['fileName']),
+                                embedLink: "http://www.uploads.poonkje.com/e/" + req.params.id,
+                                filenamedir: "http://www.uploads.poonkje.com/embedImage/" + req.params.id + path.extname(result[0]['fileName']),
                                 og_size_x: imgDimension.width,
                                 og_size_y: imgDimension.height
                             });
