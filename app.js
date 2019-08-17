@@ -199,7 +199,6 @@ app.post('/', (req, res) => {
 
             res.render('index', {
                 dl: "http://www.uploads.poonkje.com/" + name,
-                msg: req.connection.remoteAddress,
                 username: backgroundInfo.username,
                 profileURI: backgroundInfo.userprofile,
                 uri: backgroundInfo.rawURI
