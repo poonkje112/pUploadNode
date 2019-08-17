@@ -94,9 +94,9 @@ app.get('/:id', function (req, res) {
                             res.send("id: " + req.params.id)
                         } else if (result[0] !== undefined) {
                             var imgDimension = undefined;
-                            const MIME = FileType(readChunk.sync(dbInfo['fileStorage'] + "/" + req.params.id + path.extname(result[0]['fileName']), 0, FileType.minimumBytes)).mime;
+                            const MIME = FileType(readChunk.sync(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']), 0, FileType.minimumBytes)).mime;
                             if (MIME.includes("image")) {
-                                imgDimension = imageSize(dbInfo['fileStorage'] + "/" + req.params.id + path.extname(result[0]['fileName']));
+                                imgDimension = imageSize(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']));
                             }
                             res.render('file', {
                                 username: backgroundInfo.username,
