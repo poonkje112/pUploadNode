@@ -7,12 +7,15 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <meta property="og:url" content=<%=typeof fid !='undefined' ? 'http://www.uploads.poonkje.com/' + fid :
+        'http://www.uploads.poonkje.com/' %> />
     <meta property="og:site_name" content="pUploads" />
-    <meta property="og:type" content="article" />
     <meta property="og:title" content=<%=typeof filename !='undefined' ? filename : '' %> />
     <meta property="og:image" content=<%=typeof filenamedir !='undefined' ? filenamedir : '' %> />
+    <meta property="og:type" content="article" />
     <meta property="og:image:width" content=<%=typeof og_size_x !='undefined' ? og_size_x : '0' %> />
     <meta property="og:image:height" content=<%=typeof og_size_y !='undefined' ? og_size_y : '0' %> />
+    <meta property="og:description" content="pUploads is an online service where you can store an file for a few days" />
 
     <style>
 
