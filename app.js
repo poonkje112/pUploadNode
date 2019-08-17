@@ -8,6 +8,9 @@ const uid = require('uniqid');
 const fs = require('fs');
 const request = require('request');
 const Unsplash = require('unsplash-js').default;
+const FileType = require('file-type');
+const readChunk = require('read-chunk');
+const imageSize = require('image-size');
 const $ = require('jquery');
 
 const time = [];
@@ -90,7 +93,10 @@ app.get('/:id', function (req, res) {
                         if (err) {
                             res.send("id: " + req.params.id)
                         } else if (result[0] !== undefined) {
-
+                            const imgDimension;
+                            if ((FileType(readChunk.sync(dbInfo['fileStorage'] + "/" + req.params.id + path.extname(result[0]['fileName']), 0, FileType.minimumBytes))).contains("image")) {
+                                imgDimension = imageSize(FileType(readChunk.sync(dbInfo['fileStorage'] + "/" + req.params.id + path.extname(result[0]['fileName']), 0, FileType.minimumBytes)));
+                            }
                             res.render('file', {
                                 username: backgroundInfo.username,
                                 profileURI: backgroundInfo.userprofile,
@@ -99,8 +105,11 @@ app.get('/:id', function (req, res) {
                                 date: new Date(parseInt(result[0]['sDate'])),
                                 fid: req.params.id,
                                 embedLink: "http://www.poonkje.com/e/" + req.params.id,
-                                filenamedir: dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']),
+                                filenamedir: dbInfo['fileStorage'] + "/" + req.params.id + path.extname(result[0]['fileName']),
+                                og_size_x: imgDimension.width,
+                                og_size_y: imgDimension.height
                             });
+                            // console.log(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']));
                         } else {
                             res.send('Error 404')
                         }
