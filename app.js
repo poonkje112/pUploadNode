@@ -12,6 +12,21 @@ const $ = require('jquery');
 
 const time = [];
 const ids = [];
+const backgroundInfo = {
+    username: "John Westrock",
+    rawURI: "https://images.unsplash.com/photo-1562158498-3f572baaf697?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjg2NjQzfQ",
+    userprofile: "https://unsplash.com/@johnwestrock"
+}
+const unsplash = new Unsplash({
+    applicationId: dbInfo["splashId"],
+    secret: dbInfo["splashSecret"]
+});
+
+function toJson(res) {
+    return typeof res.json === "function" ? res.json() : res;
+}
+
+
 
 const con = sql.createConnection({
     host: dbInfo['host'],
@@ -55,7 +70,10 @@ app.get('/samplefile', function (req, res) {
         date: new Date(),
         fid: req.params.id,
         embedLink: "http://www.poonkje.com/samplefile",
-        filenamedir: "/static/uploads/"
+        filenamedir: "/static/uploads/",
+        username: backgroundInfo.username,
+        profileURI: backgroundInfo.userprofile,
+        uri: backgroundInfo.rawURI
     });
 });
 
@@ -74,11 +92,14 @@ app.get('/:id', function (req, res) {
                         } else if (result[0] !== undefined) {
 
                             res.render('file', {
+                                username: backgroundInfo.username,
+                                profileURI: backgroundInfo.userprofile,
+                                uri: backgroundInfo.rawURI,
                                 filename: unescape(result[0]['fileName']),
                                 date: new Date(parseInt(result[0]['sDate'])),
                                 fid: req.params.id,
                                 embedLink: "http://www.poonkje.com/e/" + req.params.id,
-                                filenamedir: dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName'])
+                                filenamedir: dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']),
                             });
                         } else {
                             res.send('Error 404')
@@ -140,9 +161,12 @@ app.get('/', function (req, res) {
                 if (parseFloat(body) > 0.99) {
                     res.send("ERROR: VPN's and Proxy's are not allowed!");
                 } else {
-                    res.render('index');
+                    res.render('index', {
+                        username: backgroundInfo.username,
+                        profileURI: backgroundInfo.userprofile,
+                        uri: backgroundInfo.rawURI
+                    });
                 }
-                console.log(body);
             }
         });
 });
@@ -152,11 +176,17 @@ app.post('/', (req, res) => {
     upload(req, res, (err) => {
         if (err) {
             res.render('index', {
-                msg: err
+                msg: err,
+                username: backgroundInfo.username,
+                profileURI: backgroundInfo.userprofile,
+                uri: backgroundInfo.rawURI
             });
         } else if (req.file == undefined) {
             res.render('index', {
-                msg: 'Error: No file selected'
+                msg: 'Error: No file selected',
+                username: backgroundInfo.username,
+                profileURI: backgroundInfo.userprofile,
+                uri: backgroundInfo.rawURI
             })
         } else {
             var name = req.file.filename;
@@ -169,7 +199,10 @@ app.post('/', (req, res) => {
 
             res.render('index', {
                 dl: "http://www.uploads.poonkje.com/" + name,
-                msg: req.connection.remoteAddress
+                msg: req.connection.remoteAddress,
+                username: backgroundInfo.username,
+                profileURI: backgroundInfo.userprofile,
+                uri: backgroundInfo.rawURI
             });
         }
     });
@@ -209,3 +242,18 @@ setInterval(function () {
     }
 
 }, interval);
+
+const bminutes = 2;
+const binterval = bminutes * 60 * 1000;
+
+setInterval(function () {
+    unsplash.photos.getRandomPhoto({
+        width: 4096,
+        height: 2160,
+        query: "natural"
+    }).then(toJson).then(json => {
+        backgroundInfo.userprofile = json['user']['links']['html'] + "?utm_source=pUploads&utm_medium=referral";
+        backgroundInfo.username = json['user']['name'];
+        backgroundInfo.rawURI = json['urls']['raw'];
+    });
+}, binterval);

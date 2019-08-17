@@ -6,8 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <style>
+
+        body {
+            background-image:url(<%= typeof uri != 'undefined' ? uri : ''%>);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100%;
+        }
+    
+    </style>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="/css/main.css" />
+
+
     <title>Node file upload</title>
 </head>
 
@@ -50,8 +64,9 @@
     </div>
 
     <div class="footer">
-        Developed by <a href="https://www.poonkje.com/">poonkje</a>
-        <div class="footer_info">Background by <a href="https://unsplash.com/@v2osk">v2osk</a> on <a href="https://unsplash.com/?utm_source=pUploads&utm_medium=referral">Unsplash</a></div>
+        <div class="dev">Developed by <a href="https://www.poonkje.com/">poonkje</a></div>
+        <div class="footer_info">Background by <a href=<%=typeof profileURI !='undefined' ? profileURI : '' %>>
+                <%= typeof username != 'undefined' ? username : ''%></a> on <a href="https://unsplash.com/?utm_source=pUploads&utm_medium=referral">Unsplash</a></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="

@@ -1,15 +1,7 @@
 /* Desktop */
 body, html {
     height: 100%;
-}
-
-.background {
-    background-image:url("/css/img/sample.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100%;
-}
+} 
 
 .fContainer {
     background-color: whitesmoke;
@@ -64,8 +56,13 @@ body, html {
     float: left;
 }
 
-.footer .footer_info {
-    display: inline;
+.dev {
+    display: inline-block;
+    margin-left: -13%;
+}
+
+.footer_info .dev {
+    display: inline-block;
 }
 
 /* Mobile */
@@ -108,5 +105,10 @@ body, html {
 
     .footer_info {
         visibility: hidden;
+    }
+
+    .dev {
+        display: inline-block;
+        margin-left: -26%;
     }
 }
