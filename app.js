@@ -106,7 +106,7 @@ app.get('/:id', function (req, res) {
                                 date: new Date(parseInt(result[0]['sDate'])),
                                 fid: req.params.id,
                                 embedLink: "http://www.poonkje.com/e/" + req.params.id,
-                                filenamedir: dbInfo['fileStorage'] + "/" + req.params.id + path.extname(result[0]['fileName']),
+                                filenamedir: "http://www.poonkje.com/embedImage/" + req.params.id + path.extname(result[0]['fileName']),
                                 og_size_x: imgDimension.width,
                                 og_size_y: imgDimension.height
                             });
@@ -220,6 +220,7 @@ app.post('/', (req, res) => {
 //Setting our static folders
 app.use('/css', express.static(__dirname + '/public/css'));
 app.use(express.static(dbInfo['fileStorage']));
+app.use('/embedImage', express.static(dbInfo['fileStorage']));
 
 //Setting our webserver port
 const port = 80;
