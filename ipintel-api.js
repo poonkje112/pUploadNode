@@ -10,7 +10,7 @@ function checkIP(ip) {
                     console.log(`ALERT: ${ip} Has been blocked!`)
                     return true;
                 } else {
-                    return false;
+                    return true;
                 }
             }
         });
