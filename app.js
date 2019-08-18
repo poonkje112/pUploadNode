@@ -60,34 +60,33 @@ app.get('/samplefile', function (req, res) {
 app.get('/:id', function (req, res) {
     if (ipIntel.IpBanned(req.connection.remoteAddress)) {
         res.send("Oops! The usage of a VPN/Proxy is not allowed!");
-        res.end();
-        return;
-    }
-    con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
-        if (err) {
-            res.send("id: " + req.params.id)
-        } else if (result[0] !== undefined) {
-            var imgDimension = undefined;
-            const MIME = FileType(readChunk.sync(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']), 0, FileType.minimumBytes)).mime;
-            if (MIME.includes("image")) {
-                imgDimension = imageSize(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']));
+    } else {
+        con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
+            if (err) {
+                res.send("id: " + req.params.id)
+            } else if (result[0] !== undefined) {
+                var imgDimension = undefined;
+                const MIME = FileType(readChunk.sync(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']), 0, FileType.minimumBytes)).mime;
+                if (MIME.includes("image")) {
+                    imgDimension = imageSize(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']));
+                }
+                res.render('file', {
+                    username: backgroundInfo.username,
+                    profileURI: backgroundInfo.userprofile,
+                    uri: backgroundInfo.rawURI,
+                    filename: unescape(result[0]['fileName']),
+                    date: new Date(parseInt(result[0]['sDate'])),
+                    fid: req.params.id,
+                    embedLink: "http://www.uploads.poonkje.com/e/" + req.params.id,
+                    filenamedir: "http://www.uploads.poonkje.com/embedImage/" + req.params.id + path.extname(result[0]['fileName']),
+                    og_size_x: imgDimension.width,
+                    og_size_y: imgDimension.height
+                });
+            } else {
+                res.send('Error 404')
             }
-            res.render('file', {
-                username: backgroundInfo.username,
-                profileURI: backgroundInfo.userprofile,
-                uri: backgroundInfo.rawURI,
-                filename: unescape(result[0]['fileName']),
-                date: new Date(parseInt(result[0]['sDate'])),
-                fid: req.params.id,
-                embedLink: "http://www.uploads.poonkje.com/e/" + req.params.id,
-                filenamedir: "http://www.uploads.poonkje.com/embedImage/" + req.params.id + path.extname(result[0]['fileName']),
-                og_size_x: imgDimension.width,
-                og_size_y: imgDimension.height
-            });
-        } else {
-            res.send('Error 404')
-        }
-    })
+        })
+    }
 });
 
 
@@ -95,22 +94,21 @@ app.get('/:id', function (req, res) {
 app.get('/e/:id', function (req, res) {
     if (ipIntel.IpBanned(req.connection.remoteAddress)) {
         res.send("Oops! The usage of a VPN/Proxy is not allowed!");
-        res.end();
-        return;
+    } else {
+        con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
+            if (err) {
+                res.send("id: " + req.params.id)
+            } else if (result[0] !== undefined) {
+                res.download(dbInfo['fileStorage'] + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
+                    if (err) {
+                        throw (err);
+                    } else {
+                    }
+                });
+            } else {
+            }
+        })
     }
-    con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
-        if (err) {
-            res.send("id: " + req.params.id)
-        } else if (result[0] !== undefined) {
-            res.download(dbInfo['fileStorage'] + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
-                if (err) {
-                    throw (err);
-                } else {
-                }
-            });
-        } else {
-        }
-    })
 });
 
 app.post('/:id', function (req, res) {
@@ -133,14 +131,13 @@ app.post('/:id', function (req, res) {
 app.get('/', function (req, res) {
     if (ipIntel.IpBanned(req.connection.remoteAddress)) {
         res.send("Oops! The usage of a VPN/Proxy is not allowed!");
-        res.end();
-        return;
+    } else {
+        res.render('index', {
+            username: backgroundInfo.username,
+            profileURI: backgroundInfo.userprofile,
+            uri: backgroundInfo.rawURI
+        });
     }
-    res.render('index', {
-        username: backgroundInfo.username,
-        profileURI: backgroundInfo.userprofile,
-        uri: backgroundInfo.rawURI
-    });
 });
 
 // What to do when there is a post for /upload
