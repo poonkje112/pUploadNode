@@ -58,9 +58,7 @@ app.get('/samplefile', function (req, res) {
 
 // If there is an id we open the file download page
 app.get('/:id', function (req, res) {
-    if (ipIntel.IpBanned(req.connection.remoteAddress)) {
-        res.send("Oops! The usage of a VPN/Proxy is not allowed!");
-    } else {
+    ipIntel.IpBanned(req.connection.remoteAddress, res, function () {
         con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
             if (err) {
                 res.send("id: " + req.params.id)
@@ -86,15 +84,13 @@ app.get('/:id', function (req, res) {
                 res.send('Error 404')
             }
         })
-    }
+    });
 });
 
 
 // If there is an id we open the file download page
 app.get('/e/:id', function (req, res) {
-    if (ipIntel.IpBanned(req.connection.remoteAddress)) {
-        res.send("Oops! The usage of a VPN/Proxy is not allowed!");
-    } else {
+    ipIntel.IpBanned(req.connection.remoteAddress, res, function () {
         con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
             if (err) {
                 res.send("id: " + req.params.id)
@@ -108,7 +104,7 @@ app.get('/e/:id', function (req, res) {
             } else {
             }
         })
-    }
+    });
 });
 
 app.post('/:id', function (req, res) {
@@ -129,15 +125,13 @@ app.post('/:id', function (req, res) {
 
 //If there is no ID then we go to load our upload form
 app.get('/', function (req, res) {
-    if (ipIntel.IpBanned(req.connection.remoteAddress)) {
-        res.send("Oops! The usage of a VPN/Proxy is not allowed!");
-    } else {
+    ipIntel.IpBanned(req.connection.remoteAddress, res, function () {
         res.render('index', {
             username: backgroundInfo.username,
             profileURI: backgroundInfo.userprofile,
             uri: backgroundInfo.rawURI
         });
-    }
+    });
 });
 
 // What to do when there is a post for /upload
