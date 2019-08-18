@@ -11,6 +11,7 @@ const imageSize = require('image-size');
 const background = require('./background-api');
 const ipIntel = require('./ipintel-api');
 const database = require('./databaseController');
+
 const dbInfo = require('./dbInfo.json');
 
 const $ = require('jquery');
