@@ -7,13 +7,13 @@ const path = require('path');
 const FileType = require('file-type');
 const readChunk = require('read-chunk');
 const imageSize = require('image-size');
-const $ = require('jquery');
 
 const background = require('./background-api');
 const ipIntel = require('./ipintel-api');
 const database = require('./databaseController');
 const dbInfo = require('./dbInfo.json');
 
+const $ = require('jquery');
 
 
 

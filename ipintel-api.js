@@ -6,6 +6,7 @@ function checkIP(ip) {
         function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 if (parseFloat(body) > 0.99) {
+                    console.log(`ALERT: ${ip} Has been blocked!`)
                     return true;
                 } else {
                     return false;
