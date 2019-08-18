@@ -26,7 +26,7 @@ const con = database.createConnection();
 const storage = multer.diskStorage({
     destination: dbInfo['fileStorage'],
     filename: function (req, file, cb) {
-        const fileID = database.addFile(con);
+        const fileID = database.addFile(con, file.originalname);
         cb(null, fileID + path.extname(file.originalname));
     }
 });

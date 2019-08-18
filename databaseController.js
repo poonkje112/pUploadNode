@@ -14,18 +14,18 @@ module.exports = {
                     fs.unlink(dbInfo['fileStorage'] + fileName, function (err) {
                         if (err) { } else { purgedFiles += 1; }
                     });
-                    con.query("DELETE FROM `upload_DB` WHERE `upload_DB`.`fileID` = '" + results[i]['fileID'] + "'");
+                    connection.query("DELETE FROM `upload_DB` WHERE `upload_DB`.`fileID` = '" + results[i]['fileID'] + "'");
                 }
             }
         });
         if (purgedFiles > 1) console.log(`${purgedFiles} Files deleted!`)
         else if (purgedFiles > 0) console.log(`${purgedFiles} File deleted!`)
     },
-    addFile: function (connection) {
+    addFile: function (connection, fileName) {
         const curDate = Date.now();
         const eDate = (curDate + 86400000);
         var fileID = uid();
-        con.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + fileID + "', '" + curDate + "', '" + eDate + "', '" + escape(file.originalname) + "')");
+        connection.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + fileID + "', '" + curDate + "', '" + eDate + "', '" + escape(fileName) + "')");
         return fileID;
     },
     updateEndTime: function (connection, times, ID) {
