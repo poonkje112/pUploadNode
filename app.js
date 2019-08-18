@@ -17,7 +17,7 @@ const $ = require('jquery');
 
 
 
-const backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
+var backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
 
 const con = database.createConnection();
 
