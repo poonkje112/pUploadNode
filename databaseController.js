@@ -46,6 +46,11 @@ module.exports = {
             database: dbInfo['database']
         });
 
+        SQLConnection.connect(function (err) {
+            if (err) console.log(err);
+            console.log("Connected to database!")
+        });
+
         return SQLConnection;
     }
 }

@@ -21,11 +21,6 @@ var backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
 
 const con = database.createConnection();
 
-con.connect(function (err) {
-    if (err) console.log(err);
-    console.log("Connected to database!")
-});
-
 // Creating our storage engine
 const storage = multer.diskStorage({
     destination: dbInfo['fileStorage'],
@@ -65,6 +60,7 @@ app.get('/samplefile', function (req, res) {
 app.get('/:id', function (req, res) {
     if (ipIntel.IpBanned(req.connection.remoteAddress)) {
         res.send("Oops! The usage of a VPN/Proxy is not allowed!");
+        res.end();
         return;
     }
     con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
@@ -99,6 +95,7 @@ app.get('/:id', function (req, res) {
 app.get('/e/:id', function (req, res) {
     if (ipIntel.IpBanned(req.connection.remoteAddress)) {
         res.send("Oops! The usage of a VPN/Proxy is not allowed!");
+        res.end();
         return;
     }
     con.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + req.params.id + "'", function (err, result, fields) {
@@ -136,6 +133,7 @@ app.post('/:id', function (req, res) {
 app.get('/', function (req, res) {
     if (ipIntel.IpBanned(req.connection.remoteAddress)) {
         res.send("Oops! The usage of a VPN/Proxy is not allowed!");
+        res.end();
         return;
     }
     res.render('index', {
