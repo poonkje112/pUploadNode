@@ -203,6 +203,7 @@ app.post('/', (req, res) => {
             name = name.replace(path.extname(name), "");
 
             if (parseInt(req.body.lifeTime) > 1) {
+                if (req.body.lifeTime > 3) req.body.lifeTime = 3;
                 ids.push(name);
                 time.push(parseInt(req.body.lifeTime, 10));
             }
