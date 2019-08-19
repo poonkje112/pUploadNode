@@ -1,6 +1,8 @@
 const uid = require('uniqid');
 const sql = require('mysql');
 const dbInfo = require('./dbInfo.json');
+const path = require('path');
+
 
 var SQLConnection = undefined;
 
