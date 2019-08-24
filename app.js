@@ -1,6 +1,8 @@
 const express = require('express');
 const multer = require('multer');
+const bus = require('connect-busboy');
 const ejs = require('ejs');
+const fs = require('fs');
 
 const path = require('path');
 
@@ -38,6 +40,13 @@ const upload = multer({
 
 // Creating our web app
 const app = express();
+
+
+
+function UploadFile(req, res, callback) {
+    console.log(JSON.stringify(req.body));
+    upload(req, res, callback)
+}
 
 // Setting our view engine to EJS
 app.set('view engine', 'ejs');
@@ -136,37 +145,63 @@ app.get('/', function (req, res) {
 });
 
 // What to do when there is a post for /upload
-app.post('/', (req, res) => {
-    upload(req, res, (err) => {
-        if (err) {
-            res.render('index', {
-                msg: err,
-                username: backgroundInfo.username,
-                profileURI: backgroundInfo.userprofile,
-                uri: backgroundInfo.rawURI
-            });
-        } else if (req.file == undefined) {
-            res.render('index', {
-                msg: 'Error: No file selected',
-                username: backgroundInfo.username,
-                profileURI: backgroundInfo.userprofile,
-                uri: backgroundInfo.rawURI
-            })
-        } else {
-            var name = req.file.filename;
-            name = name.replace(path.extname(name), "");
-
-            if (parseInt(req.body.lifeTime) > 1) {
-                if (req.body.lifeTime > 3) req.body.lifeTime = 3;
-                ids.push(name);
-                time.push(parseInt(req.body.lifeTime, 10));
+app.post('/', bus({ immediate: true }), (req, res) => {
+    // var bb = new bus({ headers: req.headers });
+    // console.log(req.body);
+    var password, perm, filestream, failed, lifetime, FID;
+    req.busboy.on('field', function (fieldname, value) {
+        if (fieldname === "password") password = value;
+        if (fieldname === "lifeTime" && value === "perm") {
+            perm = true;
+        } else if (fieldname === "lifeTime") {
+            if (isNaN(value)) {
+                lifetime = 1;
+            } else if (parseInt(value) > 3) {
+                lifetime = 3;
+            } else if (parseInt(value) < 1) {
+                lifetime = 1;
+            } else {
+                lifetime = parseInt(value);
             }
+        }
+        // console.log(`${password} : ${perm} : ${lifetime}`)
+        console.log(`${fieldname} : ${value}`);
+    });
 
+    req.busboy.on('file', function (fieldname, file, filename) {
+        if (perm === true) {
+            if (password === "321") {
+                var curDate = Date.now();
+                var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
+                FID = database.uploadFile(con, filename, curDate, eDate);
+                var fileName = FID + path.extname(filename);
+                file.pipe(fs.createWriteStream(dbInfo['fileStorage'] + fileName));
+            } else {
+                failed = true;
+                res.render('index', {
+                    msg: "Wrong password!",
+                    username: backgroundInfo.username,
+                    profileURI: backgroundInfo.userprofile,
+                    uri: backgroundInfo.rawURI
+                });
+            }
+        } else {
+            var curDate = Date.now();
+            var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
+            FID = database.uploadFile(con, filename, curDate, eDate);
+            var fileName = FID + path.extname(filename);
+            file.pipe(fs.createWriteStream(dbInfo['fileStorage'] + fileName));
+        }
+    });
+
+    req.busboy.on('finish', function () {
+        if (!failed) {
             res.render('index', {
-                dl: "http://www.uploads.poonkje.com/" + name,
+                msg: "",
                 username: backgroundInfo.username,
                 profileURI: backgroundInfo.userprofile,
-                uri: backgroundInfo.rawURI
+                uri: backgroundInfo.rawURI,
+                dl: "http://localhost/" + FID
             });
         }
     });
@@ -191,11 +226,11 @@ setInterval(function () {
 
     database.purgeFiles(con);
 
-    for (i = 0; i < ids.length; i++) {
-        const id = ids.pop();
-        const t = time.pop();
-        database.updateEndTime(con, t, id);
-    }
+    // for (i = 0; i < ids.length; i++) {
+    //     const id = ids.pop();
+    //     const t = time.pop();
+    //     database.updateEndTime(con, t, id);
+    // }
 
 }, interval);
 

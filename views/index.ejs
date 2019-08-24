@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="/css/main.css" />
 
 
+
     <title>Node file upload</title>
 </head>
 
@@ -36,31 +37,42 @@
                 </p>
             </b>
         </font>
-        <form action="/" method="POST" enctype="multipart/form-data">
-            <div class='file-field input-field'>
-                <div class='btn grey'>
-                    <span>File</span>
-                    <input name="myFile" type="file">
+        <div>
+            <form action="/" method="POST" enctype="multipart/form-data">
+                <div class="uploadForm">
+                    <div class="fLifeTime">
+                        <label>File Lifetime</label>
+                        <select id="selector" class="browser-default" name="lifeTime" onchange="UpdateForm('passwordField', this)">
+                            <option value="1">1 Day</option>
+                            <option value="2">2 Days</option>
+                            <option value="3">3 Days</option>
+                            <option value="perm">Permanent</option>
+                        </select>
+                    </div>
+                    </br>
+                    <div class="submit_form">
+                        <div class="input-field col s12 passwordField" id="passwordField">
+                            <input id="password" type="password" class="validate" name="password">
+                            <label for="password">Password</label>
+                        </div>
+                        <button type="submit" class="btn s_btn">Submit</button>
+                    </div>
+                    <div class='file-field input-field fileSelectField'>
+                        <div class='btn grey'>
+                            <span>File</span>
+                            <input name="myFile" type="file">
+                        </div>
+                        <div class='file-path=wrapper'>
+                            <input class='file-path validate' type='text' placeholder="Upload a file">
+                        </div>
+                    </div>
                 </div>
-                <div class='file-path=wrapper'>
-                    <input class='file-path validate' type='text' placeholder="Upload a file">
-                </div>
-            </div>
-            <div>
-                <label>File Lifetime</label>
-                <select class="browser-default" name="lifeTime">
-                    <option value="1">1 Day</option>
-                    <option value="2">2 Days</option>
-                    <option value="3">3 Days</option>
-                </select>
-            </div>
-            </br>
-            <button type="submit" class="btn">Submit</button>
-            <p>
-                <a href=<%=typeof dl !='undefined' ? dl : '' %>>
-                    <%= typeof dl != 'undefined' ? dl : '' %></a>
-            </p>
-        </form>
+            </form>
+        </div>
+        <p>
+            <a href=<%=typeof dl !='undefined' ? dl : '' %>>
+                <%= typeof dl != 'undefined' ? dl : '' %></a>
+        </p>
     </div>
 
     <div class="footer">
@@ -72,6 +84,16 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+    <script>
+        $('document').ready(function () {
+            document.getElementById("selector").value = 1;
+        });
+        function UpdateForm(id, el) {
+            document.getElementById(id).style.display = el.value == "perm" ? "table-cell" : "none";
+        }
+    </script>
 </body>
 
 </html>

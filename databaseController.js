@@ -10,7 +10,7 @@ var SQLConnection = undefined;
 module.exports = {
     purgeFiles: function (connection) {
         var purgedFiles = 0;
-        connection.query("SELECT * FROM `upload_DB` WHERE eDate < " + Date.now(), function (err, results, fields) {
+        connection.query("SELECT * FROM `upload_DB` WHERE eDate < " + Date.now() + " AND eDate > 0", function (err, results, fields) {
             if (results[0] !== undefined) {
                 for (i = 0; i < results.length; i++) {
                     const fileName = results[i]['fileID'] + path.extname(results[i]['fileName']);
@@ -30,6 +30,16 @@ module.exports = {
         var fileID = uid();
         connection.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + fileID + "', '" + curDate + "', '" + eDate + "', '" + escape(fileName) + "')");
         return fileID;
+    },
+    uploadFile: function (connection, filename, curDate, eDate) {
+        var FID = uid();
+        connection.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + FID + "', '" + curDate + "', '" + eDate + "', '" + escape(filename) + "')");
+        // console.log(`----------INFO----------`);
+        // console.log(`Filename: ${filename}`);
+        // console.log(`curDate: ${curDate}`);
+        // console.log(`eDate: ${eDate}`);
+        // console.log(`eDate: ${FID}`);
+        return FID;
     },
     updateEndTime: function (connection, times, ID) {
         connection.query("SELECT * FROM `upload_DB` WHERE BINARY `fileID` = '" + ID + "'", function (err, results, fields) {
