@@ -165,7 +165,7 @@ app.post('/', bus({ immediate: true }), (req, res) => {
             }
         }
         // console.log(`${password} : ${perm} : ${lifetime}`)
-        console.log(`${fieldname} : ${value}`);
+        // console.log(`${fieldname} : ${value}`);
     });
 
     req.busboy.on('file', function (fieldname, file, filename) {
