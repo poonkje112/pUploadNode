@@ -201,7 +201,7 @@ app.post('/', bus({ immediate: true }), (req, res) => {
                 username: backgroundInfo.username,
                 profileURI: backgroundInfo.userprofile,
                 uri: backgroundInfo.rawURI,
-                dl: "http://localhost/" + FID
+                dl: "http://uploads.poonkje.com/" + FID
             });
         }
     });
