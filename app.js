@@ -164,33 +164,40 @@ app.post('/', bus({ immediate: true }), (req, res) => {
                 lifetime = parseInt(value);
             }
         }
-        // console.log(`${password} : ${perm} : ${lifetime}`)
-        // console.log(`${fieldname} : ${value}`);
     });
 
     req.busboy.on('file', function (fieldname, file, filename) {
-        if (perm === true) {
-            if (password === "321") {
+        if (filename !== "") {
+            if (perm === true) {
+                if (password === "321") { // TODO Change this
+                    var curDate = Date.now();
+                    var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
+                    FID = database.uploadFile(con, filename, curDate, eDate);
+                    var fileName = FID + path.extname(filename);
+                    file.pipe(fs.createWriteStream(dbInfo['fileStorage'] + fileName));
+                } else {
+                    failed = true;
+                    res.render('index', {
+                        msg: "Wrong password!",
+                        username: backgroundInfo.username,
+                        profileURI: backgroundInfo.userprofile,
+                        uri: backgroundInfo.rawURI
+                    });
+                }
+            } else {
                 var curDate = Date.now();
                 var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
                 FID = database.uploadFile(con, filename, curDate, eDate);
                 var fileName = FID + path.extname(filename);
                 file.pipe(fs.createWriteStream(dbInfo['fileStorage'] + fileName));
-            } else {
-                failed = true;
-                res.render('index', {
-                    msg: "Wrong password!",
-                    username: backgroundInfo.username,
-                    profileURI: backgroundInfo.userprofile,
-                    uri: backgroundInfo.rawURI
-                });
             }
         } else {
-            var curDate = Date.now();
-            var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
-            FID = database.uploadFile(con, filename, curDate, eDate);
-            var fileName = FID + path.extname(filename);
-            file.pipe(fs.createWriteStream(dbInfo['fileStorage'] + fileName));
+            res.render('index', {
+                msg: "No file selected!",
+                username: backgroundInfo.username,
+                profileURI: backgroundInfo.userprofile,
+                uri: backgroundInfo.rawURI
+            });
         }
     });
 
