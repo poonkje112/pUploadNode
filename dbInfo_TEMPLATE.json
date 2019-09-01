@@ -1,0 +1,7 @@
+{
+    "host": "YOUR_HOST",
+    "username": "YOUR_MYSQL_USERNAME",
+    "password": "YOUR_MYSQL_PASSWORD",
+    "database": "YOUR_MYSQL_DATABASE",
+    "fileStorage": "YOUR_SAVING_DIRECTORY"
+}
