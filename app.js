@@ -1,5 +1,4 @@
 const express = require('express');
-const multer = require('multer');
 const bus = require('connect-busboy');
 const ejs = require('ejs');
 const fs = require('fs');
@@ -16,37 +15,20 @@ const database = require('./databaseController');
 
 const dbInfo = require('./dbInfo.json');
 
-const $ = require('jquery');
+// const $ = require('jquery');
 
 
-
-var backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
+// var backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
+var backgroundInfo = {
+    userprofile: "https://unsplash.com/@8moments?utm_source=pUploads&utm_medium=referral",
+    username: "Simon Matzinger",
+    rawURI: "https://images.unsplash.com/photo-1500622944204-b135684e99fd?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjg2NjQzfQ"
+}
 
 const con = database.createConnection();
 
-// Creating our storage engine
-const storage = multer.diskStorage({
-    destination: dbInfo['fileStorage'],
-    filename: function (req, file, cb) {
-        const fileID = database.addFile(con, file.originalname);
-        cb(null, fileID + path.extname(file.originalname));
-    }
-});
-
-//Setting the options for multer
-const upload = multer({
-    storage: storage
-}).single('myFile');
-
 // Creating our web app
 const app = express();
-
-
-
-function UploadFile(req, res, callback) {
-    console.log(JSON.stringify(req.body));
-    upload(req, res, callback)
-}
 
 // Setting our view engine to EJS
 app.set('view engine', 'ejs');
@@ -91,7 +73,11 @@ app.get('/:id', function (req, res) {
                     og_size_y: imgDimension.height
                 });
             } else {
-                res.send('Error 404')
+                res.render('error-404', {
+                    username: backgroundInfo.username,
+                    profileURI: backgroundInfo.userprofile,
+                    uri: backgroundInfo.rawURI
+                });
             }
         })
     });
@@ -108,10 +94,8 @@ app.get('/e/:id', function (req, res) {
                 res.download(dbInfo['fileStorage'] + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
                     if (err) {
                         throw (err);
-                    } else {
                     }
                 });
-            } else {
             }
         })
     });
@@ -125,10 +109,8 @@ app.post('/:id', function (req, res) {
             res.download(dbInfo['fileStorage'] + result[0]['fileID'] + unescape(path.extname(result[0]['fileName'])), unescape(result[0]['fileName']), function (err) {
                 if (err) {
                     throw (err);
-                } else {
                 }
             });
-        } else {
         }
     })
 });
@@ -146,8 +128,6 @@ app.get('/', function (req, res) {
 
 // What to do when there is a post for /upload
 app.post('/', bus({ immediate: true }), (req, res) => {
-    // var bb = new bus({ headers: req.headers });
-    // console.log(req.body);
     var password, perm, filestream, failed, lifetime, FID;
     req.busboy.on('field', function (fieldname, value) {
         if (fieldname === "password") password = value;
@@ -227,23 +207,13 @@ app.listen(port, () => console.log(`Server started on port ${port}`));
 const minutes = 0.3;
 const interval = minutes * 60 * 1000;
 
-const time = [];
-const ids = [];
 setInterval(function () {
-
     database.purgeFiles(con);
-
-    // for (i = 0; i < ids.length; i++) {
-    //     const id = ids.pop();
-    //     const t = time.pop();
-    //     database.updateEndTime(con, t, id);
-    // }
-
 }, interval);
 
 const bminutes = 2;
 const binterval = bminutes * 60 * 1000;
 
 setInterval(function () {
-    backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
+    // backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
 }, binterval);

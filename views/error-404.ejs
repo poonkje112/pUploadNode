@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>File not found!</title>
+    <style>
+        body {
+            background-image: url(<%= typeof uri != 'undefined' ? uri : ''%>);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100%;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="/css/main.css" />
+</head>
+
+<body>
+    <div class="mContainer">
+        <p>You were expecting a file,</p>
+        <p>But it was I, error 404 File not found!</p>
+        <a href="http://fav.me/d7x76k9">
+            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5a92d426-d9a0-49bc-9d59-471d43e0eda4/d7x76k9-01758c12-58ba-4728-9b10-ec2f649a9bae.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzVhOTJkNDI2LWQ5YTAtNDliYy05ZDU5LTQ3MWQ0M2UwZWRhNFwvZDd4NzZrOS0wMTc1OGMxMi01OGJhLTQ3MjgtOWIxMC1lYzJmNjQ5YTliYWUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Lbd5IA3IfCWzZe14a7AE9AJYwm2I54IOiZPNKNnA8iQ"
+                width="256" height="256" />
+        </a>
+        <p><a href="http://uploads.poonkje.com/">Return to home</a></p>
+    </div>
+
+    <div class="footer">
+        <div class="dev">Developed by <a href="https://www.poonkje.com/">poonkje</a></div>
+        <div class="footer_info">Background by <a href=<%=typeof profileURI !='undefined' ? profileURI : '' %>>
+                <%= typeof username != 'undefined' ? username : ''%></a> on <a href="https://unsplash.com/?utm_source=pUploads&utm_medium=referral">Unsplash</a></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+
+</html>

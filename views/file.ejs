@@ -18,7 +18,7 @@
     <meta property="og:image:height" content=<%=typeof og_size_y !='undefined' ? og_size_y : '0' %> />
     <meta property="og:description" content="pUploads is an online service where you can store an file for a few days" />
     <meta name="twitter:card" content="summary_large_image" />
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
 
         body {
@@ -40,11 +40,13 @@
     <div class="background"></div>
     <div class="fContainer">
         <!-- <iframe style="display:none;" src=<%=typeof embedLink !='undefined' ? embedLink : '' %>></iframe> -->
-
-        <p><b>File Name</b></p><br>
-        <p>
+        <div class="filename">
+            <div class="filetitle">
+                <b>File Name</b><br>
+            </div>
+            <i class="large material-icons" style="font-size: 4rem; text-align: center;">file_download</i>
             <%= typeof filename != 'undefined' ? filename : 'ERROR' %>
-        </p>
+        </div>
 
         <p><b>Upload Date</b></p><br>
         <p>
