@@ -1,6 +1,7 @@
 const express = require('express');
 const bus = require('connect-busboy');
 const ejs = require('ejs');
+// const Recaptcha = require('express-recaptcha').RecaptchaV3;
 const fs = require('fs');
 
 const path = require('path');
@@ -15,8 +16,6 @@ const database = require('./databaseController');
 
 const dbInfo = require('./dbInfo.json');
 
-// const $ = require('jquery');
-
 
 // var backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
 var backgroundInfo = {
@@ -24,6 +23,8 @@ var backgroundInfo = {
     username: "Simon Matzinger",
     rawURI: "https://images.unsplash.com/photo-1500622944204-b135684e99fd?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjg2NjQzfQ"
 }
+
+// const recaptcha = new Recaptcha(dbInfo["recaptcha_key"], dbInfo["recaptcha_secret"], { callback: "cb" });
 
 const con = database.createConnection();
 
@@ -33,7 +34,7 @@ const app = express();
 // Setting our view engine to EJS
 app.set('view engine', 'ejs');
 
-// If there is an id we open the file download page
+// Just a sample page for design purposes
 app.get('/samplefile', function (req, res) {
     res.render('file', {
         filename: "Sample File",
@@ -126,10 +127,15 @@ app.get('/', function (req, res) {
     });
 });
 
-// What to do when there is a post for /upload
+// What to do when there is a post for /
 app.post('/', bus({ immediate: true }), (req, res) => {
-    var password, perm, filestream, failed, lifetime, FID;
+    // console.log(req);
+    // recaptcha.verify(req, function (error, data) {
+    //     console.log(req.recaptcha);
+    //     if (!req.recaptcha.err) {
+    var password, perm, failed, lifetime, FID;
     req.busboy.on('field', function (fieldname, value) {
+        console.log(`${fieldname} : ${value}`);
         if (fieldname === "password") password = value;
         if (fieldname === "lifeTime" && value === "perm") {
             perm = true;
@@ -192,6 +198,15 @@ app.post('/', bus({ immediate: true }), (req, res) => {
             });
         }
     });
+    // } else {
+    //     res.render('index', {
+    //         msg: req.recaptcha.error,
+    //         username: backgroundInfo.username,
+    //         profileURI: backgroundInfo.userprofile,
+    //         uri: backgroundInfo.rawURI
+    //     });
+    // }
+    // });
 });
 
 //Setting our static folders
