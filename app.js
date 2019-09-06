@@ -24,7 +24,6 @@ var backgroundInfo = {
     rawURI: "https://images.unsplash.com/photo-1500622944204-b135684e99fd?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjg2NjQzfQ"
 }
 
-// const recaptcha = new Recaptcha(dbInfo["recaptcha_key"], dbInfo["recaptcha_secret"], { callback: "cb" });
 
 const con = database.createConnection();
 
@@ -42,6 +41,22 @@ app.get('/samplefile', function (req, res) {
         fid: req.params.id,
         embedLink: "http://www.uploads.poonkje.com/samplefile",
         filenamedir: "/static/uploads/",
+        username: backgroundInfo.username,
+        profileURI: backgroundInfo.userprofile,
+        uri: backgroundInfo.rawURI
+    });
+});
+
+app.get('/nojs', function (req, res) {
+    res.render('no-js', {
+        username: backgroundInfo.username,
+        profileURI: backgroundInfo.userprofile,
+        uri: backgroundInfo.rawURI
+    });
+});
+
+app.get('/adb', function (req, res) {
+    res.render('adb', {
         username: backgroundInfo.username,
         profileURI: backgroundInfo.userprofile,
         uri: backgroundInfo.rawURI
@@ -129,10 +144,6 @@ app.get('/', function (req, res) {
 
 // What to do when there is a post for /
 app.post('/', bus({ immediate: true }), (req, res) => {
-    // console.log(req);
-    // recaptcha.verify(req, function (error, data) {
-    //     console.log(req.recaptcha);
-    //     if (!req.recaptcha.err) {
     var password, perm, failed, lifetime, FID;
     req.busboy.on('field', function (fieldname, value) {
         console.log(`${fieldname} : ${value}`);
@@ -198,19 +209,11 @@ app.post('/', bus({ immediate: true }), (req, res) => {
             });
         }
     });
-    // } else {
-    //     res.render('index', {
-    //         msg: req.recaptcha.error,
-    //         username: backgroundInfo.username,
-    //         profileURI: backgroundInfo.userprofile,
-    //         uri: backgroundInfo.rawURI
-    //     });
-    // }
-    // });
 });
 
 //Setting our static folders
 app.use('/css', express.static(__dirname + '/public/css'));
+app.use('/js', express.static(__dirname + '/public/js'));
 app.use(express.static(dbInfo['fileStorage']));
 app.use('/embedImage', express.static(dbInfo['fileStorage']));
 

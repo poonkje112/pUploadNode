@@ -18,15 +18,22 @@
     
     </style>
 
+    <script src="/js/main.js" type="text/javascript"></script>
+    <noscript>
+        <!-- <meta http-equiv="refresh" content="0;url=http://uploads.poonkje.com/no-js" /> -->
+        <meta http-equiv="refresh" content="0;url=/nojs" />
+    </noscript>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="/css/main.css" />
-    <title>Node file upload</title>
+    <title>pUploads</title>
 </head>
 
 <body>
     <div class="background"></div>
 
-    <div class="mContainer">
+    <div class="mContainer" id="mContainer">
+        <p id="result"></p>
         <h1>File Upload</h1>
         <div style="color: red"><b>
                 <p>
@@ -36,7 +43,7 @@
         </div>
         <div>
             <form action="/" method="POST" enctype="multipart/form-data">
-                <div class="uploadForm">
+                <div class="uploadForm" id="uploadForm">
                     <div class="fLifeTime">
                         <label>File Lifetime</label>
                         <select id="selector" class="browser-default" name="lifeTime" onchange="UpdateForm('passwordField', this)">
@@ -81,16 +88,6 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-
-    <script>
-        $('document').ready(function () {
-            document.getElementById("selector").value = 1;
-        });
-        function UpdateForm(id, el) {
-            document.getElementById(id).style.display = el.value == "perm" ? "table-cell" : "none";
-        }
-    </script>
 </body>
 
 </html>
