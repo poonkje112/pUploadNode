@@ -43,7 +43,8 @@ app.get('/samplefile', function (req, res) {
         filenamedir: "/static/uploads/",
         username: backgroundInfo.username,
         profileURI: backgroundInfo.userprofile,
-        uri: backgroundInfo.rawURI
+        uri: backgroundInfo.rawURI,
+        MD5: "undefined"
     });
 });
 
@@ -91,7 +92,8 @@ app.get('/:id', function (req, res) {
                     embedLink: "http://www.uploads.poonkje.com/e/" + req.params.id,
                     filenamedir: "http://www.uploads.poonkje.com/embedImage/" + req.params.id + path.extname(result[0]['fileName']),
                     og_size_x: imgDimension.width,
-                    og_size_y: imgDimension.height
+                    og_size_y: imgDimension.height,
+                    MD5: result[0]['MD5']
                 });
             } else {
                 res.render('error-404', {
@@ -174,9 +176,7 @@ app.post('/', bus({ immediate: true }), (req, res) => {
                 if (password === "321") { // TODO Change this
                     var curDate = Date.now();
                     var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
-                    FID = database.uploadFile(con, filename, curDate, eDate);
-                    var fileName = FID + path.extname(filename);
-                    file.pipe(fs.createWriteStream(dbInfo['fileStorage'] + fileName));
+                    database.uploadFile(con, filename, curDate, eDate, file);
                 } else {
                     failed = true;
                     res.render('index', {
@@ -189,9 +189,7 @@ app.post('/', bus({ immediate: true }), (req, res) => {
             } else {
                 var curDate = Date.now();
                 var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
-                FID = database.uploadFile(con, filename, curDate, eDate);
-                var fileName = FID + path.extname(filename);
-                file.pipe(fs.createWriteStream(dbInfo['fileStorage'] + fileName));
+                database.uploadFile(con, filename, curDate, eDate, file);
             }
         } else {
             res.render('index', {
@@ -238,5 +236,5 @@ const bminutes = 2;
 const binterval = bminutes * 60 * 1000;
 
 setInterval(function () {
-    backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
+    // backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
 }, binterval);

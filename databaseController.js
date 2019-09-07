@@ -3,6 +3,7 @@ const sql = require('mysql');
 const dbInfo = require('./dbInfo.json');
 const path = require('path');
 const fs = require('fs');
+const md5 = require("md5-file")
 
 
 var SQLConnection = undefined;
@@ -31,9 +32,16 @@ module.exports = {
         connection.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + fileID + "', '" + curDate + "', '" + eDate + "', '" + escape(fileName) + "')");
         return fileID;
     },
-    uploadFile: function (connection, filename, curDate, eDate) {
+    uploadFile: function (connection, filename, curDate, eDate, file) {
         var FID = uid();
-        connection.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`) VALUES (NULL, '" + FID + "', '" + curDate + "', '" + eDate + "', '" + escape(filename) + "')");
+        var fileName = FID + path.extname(filename);
+        var stream = file.pipe(fs.createWriteStream(dbInfo['fileStorage'] + fileName));
+
+        stream.on("finish", () => {
+            var hash = md5.sync(dbInfo['fileStorage'] + fileName);
+            connection.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`, `MD5`) VALUES (NULL, '" + FID + "', '" + curDate + "', '" + eDate + "', '" + escape(filename) + "', '" + hash + "')");
+        });
+
         // console.log(`----------INFO----------`);
         // console.log(`Filename: ${filename}`);
         // console.log(`curDate: ${curDate}`);

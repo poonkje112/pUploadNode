@@ -46,14 +46,20 @@
             <div class="filetitle">
                 <b>File Name</b><br>
             </div>
-            <i class="large material-icons" style="font-size: 4rem; text-align: center;">file_download</i>
             <%= typeof filename != 'undefined' ? filename : 'ERROR' %>
         </div>
 
-        <p><b>Upload Date</b></p><br>
-        <p>
+        <div>
+            <b>Upload Date</b><br>
             <%= typeof date != 'undefined' ? date : 'ERROR' %>
-        </p>
+            <br>
+        </div>
+
+        <div>
+            <b>MD5 Checksum</b><br>
+            <%= typeof MD5 != 'undefined' ? MD5 : 'ERROR' %>
+        </div>
+
         <form id="dlForm" method="POST" action=<%=typeof fid !='undefined' ? '/' + fid : '' %>>
             <input type="submit" value="Download">
         </form>
