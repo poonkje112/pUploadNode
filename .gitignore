@@ -3,4 +3,5 @@ dbInfo.json
 ipintel.json
 unsplash.json
 *.pem
+*.bak
 
