@@ -17,12 +17,12 @@ const database = require('./databaseController');
 const dbInfo = require('./dbInfo.json');
 
 
-// var backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
-var backgroundInfo = {
-    userprofile: "https://unsplash.com/@8moments?utm_source=pUploads&utm_medium=referral",
-    username: "Simon Matzinger",
-    rawURI: "https://images.unsplash.com/photo-1500622944204-b135684e99fd?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjg2NjQzfQ"
-}
+var backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
+// var backgroundInfo = {
+//     userprofile: "https://unsplash.com/@8moments?utm_source=pUploads&utm_medium=referral",
+//     username: "Simon Matzinger",
+//     rawURI: "https://images.unsplash.com/photo-1500622944204-b135684e99fd?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjg2NjQzfQ"
+// }
 
 
 const con = database.createConnection();
@@ -238,5 +238,5 @@ const bminutes = 2;
 const binterval = bminutes * 60 * 1000;
 
 setInterval(function () {
-    // backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
+    backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
 }, binterval);
