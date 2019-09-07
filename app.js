@@ -75,6 +75,11 @@ app.get('/:id', function (req, res) {
                 const MIME = FileType(readChunk.sync(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']), 0, FileType.minimumBytes)).mime;
                 if (MIME.includes("image")) {
                     imgDimension = imageSize(dbInfo['fileStorage'] + req.params.id + path.extname(result[0]['fileName']));
+                } else {
+                    imgDimension = {
+                        width: 1,
+                        height: 1
+                    }
                 }
                 res.render('file', {
                     username: backgroundInfo.username,
