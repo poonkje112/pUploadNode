@@ -176,7 +176,7 @@ app.post('/', bus({ immediate: true }), (req, res) => {
                 if (password === "321") { // TODO Change this
                     var curDate = Date.now();
                     var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
-                    database.uploadFile(con, filename, curDate, eDate, file);
+                    FID = database.uploadFile(con, filename, curDate, eDate, file);
                 } else {
                     failed = true;
                     res.render('index', {
@@ -189,7 +189,7 @@ app.post('/', bus({ immediate: true }), (req, res) => {
             } else {
                 var curDate = Date.now();
                 var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
-                database.uploadFile(con, filename, curDate, eDate, file);
+                FID = database.uploadFile(con, filename, curDate, eDate, file);
             }
         } else {
             res.render('index', {
