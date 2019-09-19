@@ -18,11 +18,6 @@ const dbInfo = require('./dbInfo.json');
 
 
 var backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
-// var backgroundInfo = {
-//     userprofile: "https://unsplash.com/@8moments?utm_source=pUploads&utm_medium=referral",
-//     username: "Simon Matzinger",
-//     rawURI: "https://images.unsplash.com/photo-1500622944204-b135684e99fd?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjg2NjQzfQ"
-// }
 
 
 const con = database.createConnection();
@@ -153,7 +148,6 @@ app.get('/', function (req, res) {
 app.post('/', bus({ immediate: true }), (req, res) => {
     var password, perm, failed, lifetime, FID;
     req.busboy.on('field', function (fieldname, value) {
-        console.log(`${fieldname} : ${value}`);
         if (fieldname === "password") password = value;
         if (fieldname === "lifeTime" && value === "perm") {
             perm = true;
@@ -173,19 +167,21 @@ app.post('/', bus({ immediate: true }), (req, res) => {
     req.busboy.on('file', function (fieldname, file, filename) {
         if (filename !== "") {
             if (perm === true) {
-                if (password === "321") { // TODO Change this
-                    var curDate = Date.now();
-                    var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
-                    FID = database.uploadFile(con, filename, curDate, eDate, file);
-                } else {
-                    failed = true;
-                    res.render('index', {
-                        msg: "Wrong password!",
-                        username: backgroundInfo.username,
-                        profileURI: backgroundInfo.userprofile,
-                        uri: backgroundInfo.rawURI
-                    });
-                }
+                database.login(con, password, function(result) {
+                    if (result[0] !== undefined) {
+                        var curDate = Date.now();
+                        var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
+                        FID = database.uploadFile(con, filename, curDate, eDate, file);
+                    } else {
+                        failed = true;
+                        res.render('index', {
+                            msg: "Wrong password!",
+                            username: backgroundInfo.username,
+                            profileURI: backgroundInfo.userprofile,
+                            uri: backgroundInfo.rawURI
+                        });
+                    }
+                });
             } else {
                 var curDate = Date.now();
                 var eDate = perm ? -1 : curDate + (86400000 * parseInt(lifetime));
@@ -236,5 +232,5 @@ const bminutes = 2;
 const binterval = bminutes * 60 * 1000;
 
 setInterval(function () {
-    // backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
+    backgroundInfo = background.getRandomBackground("natural", 4096, 2160);
 }, binterval);
