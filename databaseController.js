@@ -41,12 +41,6 @@ module.exports = {
             var hash = md5.sync(dbInfo['fileStorage'] + fileName);
             connection.query("INSERT INTO `upload_DB` (`ID`, `fileID`, `sDate`, `eDate`, `fileName`, `MD5`) VALUES (NULL, '" + FID + "', '" + curDate + "', '" + eDate + "', '" + escape(filename) + "', '" + hash + "')");
         });
-
-        // console.log(`----------INFO----------`);
-        // console.log(`Filename: ${filename}`);
-        // console.log(`curDate: ${curDate}`);
-        // console.log(`eDate: ${eDate}`);
-        // console.log(`eDate: ${FID}`);
         return FID;
     },
     updateEndTime: function (connection, times, ID) {
@@ -73,5 +67,11 @@ module.exports = {
         });
 
         return SQLConnection;
+    },
+
+    login: function(connection, password, callback) {
+        connection.query("SELECT * FROM `credentials_DB` WHERE BINARY `password` = '" + escape(password) + "'", function(err, results, fields) {
+            callback(results);
+        });
     }
 }
