@@ -13,7 +13,7 @@
     "connect-busboy": "0.0.2",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
-    "file-type": "^12.1.0",
+    "file-type": "^16.5.4",
     "image-size": "^0.7.4",
     "md5-file": "^4.0.0",
     "mysql": "^2.17.1",
